@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	//Method 1: we use channel to signal gorutine that it have to stop.
+	// Закрытие с помощью канала
 	quit := make(chan int)
 	wg := sync.WaitGroup{}
 	go func() {
@@ -42,7 +42,7 @@ func main() {
 	go func() {
 		for {
 			select {
-			case <-time.After(time.Second / 2):
+			case <-time.After(time.Second / 2): // Time. After ожидает истечения продолжительности t, а затем отправляет текущее время по возвращаемому каналу
 				fmt.Println("Stop gorutine №3\n")
 				wg.Done()
 				return
@@ -59,13 +59,12 @@ func main() {
 		for {
 			select {
 			case _, ok := <-ch:
-				if !ok {
+				if !ok { // проверка на закрытие канала
 					fmt.Println("Stop gorutine №4")
 					return
 				}
 			}
 		}
-
 	}()
 	close(ch)
 	wg.Wait()

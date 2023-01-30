@@ -7,9 +7,9 @@ import (
 )
 
 func SetBit(temp *int64, index int, bit int) {
-	if bit == 1 {
+	if bit == 1 { // устанавливаем бит
 		*temp = (*temp) | (1 << index)
-	} else if bit == 0 {
+	} else if bit == 0 { // сбрасываем бит
 		*temp = (*temp) & ^(1 << index)
 	}
 }

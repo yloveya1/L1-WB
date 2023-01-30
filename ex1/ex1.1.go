@@ -14,6 +14,8 @@ func (h *Human) printer() {
 	fmt.Println("Name = ", h.name)
 }
 
+// При передачи структуры Human в струкстуру Action, в Action встраиваются поля и методы от Human
+
 type Action struct {
 	age int
 	Human

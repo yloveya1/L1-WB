@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	//RW-Mutex
+	// Реализация с помощью RW-Mutex
 	var mu sync.RWMutex
 	m := make(map[int]int)
 	var wg sync.WaitGroup
@@ -17,9 +17,9 @@ func main() {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			mu.Lock()
+			mu.Lock() // захват мьютекса во избежании гонки данных
 			m[i] = rand.Intn(100)
-			mu.Unlock()
+			mu.Unlock() // освобождение мьютекса
 		}(i)
 	}
 	wg.Wait()
@@ -29,7 +29,7 @@ func main() {
 	}
 	fmt.Printf("\n=====================================================\n")
 
-	// sync.Map
+	// Реализация с помощью sync.Map
 	var w sync.WaitGroup
 	var sm sync.Map
 	for i := 1; i < 10; i++ {
@@ -39,7 +39,7 @@ func main() {
 			sm.Store(i, rand.Intn(100))
 		}(i)
 	}
-	w.Wait() // ждем пока горутины закинуть в map
+	w.Wait() // ожидаем отработки горутин
 	sm.Range(func(key, value any) bool {
 		fmt.Println("key:", key, ", val:", value)
 		return true

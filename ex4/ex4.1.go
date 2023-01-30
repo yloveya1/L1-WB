@@ -19,7 +19,7 @@ func writer(ctx context.Context, chanel chan int) {
 	for {
 		select {
 		case chanel <- rand.Intn(100):
-		case <-ctx.Done():
+		case <-ctx.Done(): // если пришел сигнал завершения при закрытии контекста
 			return
 		}
 	}
@@ -28,7 +28,7 @@ func writer(ctx context.Context, chanel chan int) {
 func reader(ctx context.Context, chanel chan int) {
 	for {
 		select {
-		case <-ctx.Done():
+		case <-ctx.Done(): // если пришел сигнал завершения при закрытии контекста
 			return
 		case val := <-chanel:
 			fmt.Println(val)
@@ -50,16 +50,15 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	chanel := make(chan int)
 	for i := 0; i < count; i++ {
-		go writer(ctx, chanel)
-		go reader(ctx, chanel)
+		go writer(ctx, chanel) // пишущая горутина
+		go reader(ctx, chanel) // читающая горутина
 	}
 	go func() {
-		signalCh := make(chan os.Signal, 1)
-		signal.Notify(signalCh, os.Interrupt, syscall.SIGTERM)
+		signalCh := make(chan os.Signal, 1)                    // канал для сигналов системы
+		signal.Notify(signalCh, os.Interrupt, syscall.SIGTERM) // ждем сигнал ОС
 		<-signalCh
-		cancel()
+		cancel() // отмена контекста после поступления сигнала ОС
 	}()
 	time.Sleep(time.Second)
 	fmt.Println("Stop working!")
-
 }

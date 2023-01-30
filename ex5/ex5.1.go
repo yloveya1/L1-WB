@@ -47,16 +47,15 @@ func main() {
 		}
 		break
 	}
-	//ctx := context.Background()
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(N)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(N)*time.Second) // создание контекста с таймаутом
 	defer cancel()
 	go func() {
 		defer wg.Done()
-		reader(ctx, ch)
+		reader(ctx, ch) // читающая горутина
 	}()
 	go func() {
 		defer wg.Done()
-		writer(ctx, ch)
+		writer(ctx, ch) // пишущая горутина
 	}()
 	wg.Wait()
 	fmt.Println("Stop working!")

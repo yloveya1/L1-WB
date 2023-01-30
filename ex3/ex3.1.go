@@ -10,9 +10,9 @@ import (
 	"sync/atomic"
 )
 
-var mass []int = []int{2, 4, 6, 8, 10}
+var mass = []int{2, 4, 6, 8, 10}
 
-func AtomicSum() {
+func AtomicSum() { // реализация суммы с помощью atomic
 	var wg sync.WaitGroup
 	var sum int64 = 0
 	for _, num := range mass {
@@ -26,7 +26,7 @@ func AtomicSum() {
 	fmt.Println(sum)
 }
 
-func MutexSum() {
+func MutexSum() { // Реализация суммы с помощью мьютекса во избежании гонки данных
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 	var sum1 int
@@ -43,7 +43,7 @@ func MutexSum() {
 	fmt.Println(sum1)
 }
 
-func ChanelSum() {
+func ChanelSum() { // Создаем буффериованный канал с размером массива array
 	chanout := make(chan int, len(mass))
 
 	sum3 := 0

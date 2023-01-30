@@ -6,6 +6,9 @@ import (
 	"math/big"
 )
 
+// Пакет math/big позволяет выполнять математические операции, которые включают в себя очень большие
+// целочисленные вычисления, выходящие за пределы всех доступных примитивных типов данных.
+
 func main() {
 	var s1, s2 string
 	a, b := new(big.Float), new(big.Float)
@@ -14,7 +17,7 @@ func main() {
 		fmt.Scan(&s1)
 		a, _ = a.SetString(s1)
 		if a == nil {
-			a = new(big.Float)
+			a = new(big.Float) // Так как в случае ошибки a возвращает nil
 			fmt.Println("Проверьте корректность введнных данных и повторите попытку")
 			continue
 		}
@@ -34,8 +37,8 @@ func main() {
 	}
 
 	res := new(big.Float)
-	fmt.Println(res.Add(a, b))
-	fmt.Println(res.Sub(a, b))
-	fmt.Println(res.Mul(a, b))
-	fmt.Println(res.Quo(a, b))
+	fmt.Println(res.Add(a, b)) // Сложение
+	fmt.Println(res.Sub(a, b)) // Вычитание
+	fmt.Println(res.Mul(a, b)) // Умножение
+	fmt.Println(res.Quo(a, b)) // Деление
 }

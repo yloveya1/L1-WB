@@ -13,7 +13,7 @@ func main() {
 	var mass []int = []int{1, 2, 3, 4, 5}
 	chW, chR := make(chan int), make(chan int)
 
-	var wg sync.WaitGroup
+	var wg sync.WaitGroup // создаем wait-группу, чтобы дождаться завершения всех горутин
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
@@ -22,15 +22,15 @@ func main() {
 
 	go func() {
 		defer wg.Done()
-		for _, v := range mass {
+		for _, v := range mass { // пишем значения из массива в канал
 			chW <- v
 		}
-		close(chW)
+		close(chW) // после завершения цикла закрываем канал
 	}()
 
 	go func() {
 		wg.Wait()
-		close(chR)
+		close(chR) // закрываем канал после того, как отработают все воркеры
 	}()
 
 	for v := range chR {
@@ -43,7 +43,7 @@ func writer(chW, chR chan int) {
 	for {
 		select {
 		case val, ok := <-chW:
-			if !ok {
+			if !ok { // если канал закрыт, выходим из функции
 				return
 			}
 			chR <- val * val
